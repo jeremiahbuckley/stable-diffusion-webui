@@ -1,0 +1,19 @@
+name: ldm
+channels:
+  - pytorch
+  - defaults
+dependencies:
+  - git
+  - python=3.8.5
+  - pip=20.3
+  - cudatoolkit=11.3
+  - pytorch=1.11.0
+  - torchvision=0.12.0
+  - numpy=1.19.2
+  - pip:
+    - albumentations==0.4.3
+    - opencv-python==4.1.2.30
+    - opencv-python-headless==4.1.2.30
+    - pudb==2019.2
+    - imageio==2.9.0
+    - imageio-ffmpeg==0.4.2

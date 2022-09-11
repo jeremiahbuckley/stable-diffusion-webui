@@ -5,8 +5,9 @@ WORKDIR /sd
 
 SHELL ["/bin/bash", "-c"]
 
-RUN apt-get update && \
-    apt-get install -y libglib2.0-0 wget && \
+#RUN apt-get update && \
+RUN apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update && \
+    apt-get install -y libglib2.0-0 wget libsm6 libxext6 libxrender-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -22,5 +23,20 @@ COPY /data/DejaVuSans.ttf /usr/share/fonts/truetype/
 
 EXPOSE 7860
 
+COPY ./environment.yaml /sd/
+COPY ./env1.yaml /sd/
+COPY ./setup.py /sd/
+RUN conda env update --file env1.yaml --prune \
+&& conda clean --all
+RUN conda env update --file environment.yaml --prune \
+&& conda clean --all
+
+COPY ./model-download.sh /sd/
+RUN /sd/model-download.sh
+
+ENV VALIDATE_MODELS=$false
+
 COPY ./entrypoint.sh /sd/
+COPY ./ /sd/
+
 ENTRYPOINT /sd/entrypoint.sh
